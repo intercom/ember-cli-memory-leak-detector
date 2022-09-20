@@ -24,7 +24,8 @@
 
     if (canCaptureHeapSnapshot) {
       if (typeof QUnit !== "undefined") {
-        Testem.afterTests(detectMemoryLeaksWithQUnit);
+        QUnit.begin(detectMemoryLeaksWithQUnit);
+       // Testem.afterTests(detectMemoryLeaksWithQUnit);
       } else {
         Testem.afterTests(detectMemoryLeaksWithTestem);
       }
@@ -71,7 +72,7 @@
     }
 
     async function detectMemoryLeaksWithQUnit(_, _, callback) {
-      await new Promise((resolve) => {
+      return new Promise((resolve) => {
         QUnit.module(MODULE_NAME, {
           before: [],
           beforeEach: [],
@@ -116,8 +117,9 @@
             assert.false(false, NO_DETECTION);
           }
 
-          resolve();
+         
         }, { validTest: true }))
+        resolve();
       });
 
       if (callback) {
